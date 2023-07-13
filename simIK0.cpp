@@ -8,24 +8,6 @@
 #include <cstdio>
 #include <algorithm>
 
-#ifdef _WIN32
-#ifdef QT_COMPIL
-    #include <direct.h>
-#else
-    #include <shlwapi.h>
-    #pragma comment(lib, "Shlwapi.lib")
-#endif
-#endif
-#ifdef _WIN32
-    #include <Windows.h>
-    typedef CRITICAL_SECTION WMutex;
-#endif
-#if defined (__linux) || defined (__APPLE__)
-    #include <unistd.h>
-    #include <pthread.h>
-    typedef pthread_mutex_t WMutex;
-#endif
-
 static LIBRARY simLib;
 static CEnvCont* _allEnvironments;
 static std::string _pluginName;
@@ -55,41 +37,18 @@ void _removeJointDependencyCallback(int envId,int slaveJoint)
     }
 }
 
-SIM_DLLEXPORT int simInit(const char* pluginName)
+SIM_DLLEXPORT int simInit(SSimInit* info)
 {
-    _pluginName=pluginName;
-    char curDirAndFile[1024];
-#ifdef _WIN32
-    #ifdef QT_COMPIL
-        _getcwd(curDirAndFile, sizeof(curDirAndFile));
-    #else
-        GetModuleFileName(NULL,curDirAndFile,1023);
-        PathRemoveFileSpec(curDirAndFile);
-    #endif
-#elif defined (__linux) || defined (__APPLE__)
-    getcwd(curDirAndFile, sizeof(curDirAndFile));
-#endif
-
-    std::string currentDirAndPath(curDirAndFile);
-    std::string temp(currentDirAndPath);
-
-#ifdef _WIN32
-    temp+="\\coppeliaSim.dll";
-#elif defined (__linux)
-    temp+="/libcoppeliaSim.so";
-#elif defined (__APPLE__)
-    temp+="/libcoppeliaSim.dylib";
-#endif /* __linux || __APPLE__ */
-
-    simLib=loadSimLibrary(temp.c_str());
+    _pluginName=info->pluginName;
+    simLib=loadSimLibrary(info->coppeliaSimLibPath);
     if (simLib==NULL)
     {
-        simAddLog(pluginName,sim_verbosity_errors,"could not find or correctly load the CoppeliaSim library. Cannot start the plugin.");
+        simAddLog(info->pluginName,sim_verbosity_errors,"could not find or correctly load the CoppeliaSim library. Cannot start the plugin.");
         return(0);
     }
     if (getSimProcAddresses(simLib)==0)
     {
-        simAddLog(pluginName,sim_verbosity_errors,"could not find all required functions in the CoppeliaSim library. Cannot start the plugin.");
+        simAddLog(info->pluginName,sim_verbosity_errors,"could not find all required functions in the CoppeliaSim library. Cannot start the plugin.");
         unloadSimLibrary(simLib);
         return(0);
     }
@@ -101,7 +60,7 @@ SIM_DLLEXPORT void simCleanup()
 {
 }
 
-SIM_DLLEXPORT void simMsg(int message,int* auxData,void* auxPointer)
+SIM_DLLEXPORT void simMsg(SSimMsg*)
 {
 }
 
