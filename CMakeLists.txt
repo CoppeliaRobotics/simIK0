@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.16.3)
 project(simIK0)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -49,5 +49,5 @@ coppeliasim_add_plugin(
 target_compile_definitions(simIK0 PRIVATE SIM_MATH_DOUBLE)
 target_include_directories(simIK0 PRIVATE ../coppeliaKinematicsRoutines)
 target_include_directories(simIK0 PRIVATE ${COPPELIASIM_INCLUDE_DIR}/simMath)
-target_link_libraries(simIK0 Eigen3::Eigen)
+target_link_libraries(simIK0 PRIVATE Eigen3::Eigen)
 coppeliasim_add_lua(simIK0.lua)
