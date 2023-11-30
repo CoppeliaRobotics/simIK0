@@ -55,8 +55,8 @@ INCLUDEPATH += "../coppeliaKinematicsRoutines"
 
 INCLUDEPATH += $$EIGEN_INCLUDEPATH
 
-HEADERS += simIK0.h \
-    envCont.h \
+HEADERS += sourceCode/simIK0.h \
+    sourceCode/envCont.h \
     ../include/simLib/simLib.h \
     ../coppeliaKinematicsRoutines/ik.h \
     ../coppeliaKinematicsRoutines/environment.h \
@@ -77,8 +77,8 @@ HEADERS += simIK0.h \
     ../include/simMath/4X4Matrix.h \
     ../include/simMath/mXnMatrix.h \
 
-SOURCES += simIK0.cpp \
-    envCont.cpp \
+SOURCES += sourceCode/simIK0.cpp \
+    sourceCode/envCont.cpp \
     ../include/simLib/simLib.cpp \
     ../coppeliaKinematicsRoutines/ik.cpp \
     ../coppeliaKinematicsRoutines/environment.cpp \
