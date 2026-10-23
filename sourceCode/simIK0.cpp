@@ -173,7 +173,7 @@ SIM_DLLEXPORT void ikPlugin_setJointPosition(int ikEnv,int jointHandle,double po
 
 SIM_DLLEXPORT void ikPlugin_getSphericalJointQuaternion(int ikEnv,int jointHandle,double quaternion[4])
 {
-    C7Vector tr;
+    CPose tr;
     tr.setIdentity();
     if (ikSwitchEnvironment(ikEnv,true))
         ikGetJointTransformation(jointHandle,&tr);
@@ -185,7 +185,7 @@ SIM_DLLEXPORT void ikPlugin_getSphericalJointQuaternion(int ikEnv,int jointHandl
 
 SIM_DLLEXPORT void ikPlugin_setSphericalJointQuaternion(int ikEnv,int jointHandle,const double* quaternion)
 {
-    C4Vector q;
+    CQuaternion q;
     q(0)=quaternion[0];
     q(1)=quaternion[1];
     q(2)=quaternion[2];
@@ -319,7 +319,7 @@ SIM_DLLEXPORT double ikPlugin_getManipulability(int ikEnv,int ikGroupHandle)
 
 SIM_DLLEXPORT void ikPlugin_getObjectLocalTransformation(int ikEnv,int objectHandle,double* pos,double* quat)
 {
-    C7Vector tr;
+    CPose tr;
     tr.setIdentity();
     if (ikSwitchEnvironment(ikEnv,true))
         ikGetObjectTransformation(objectHandle,ik_handle_parent,&tr);
@@ -334,7 +334,7 @@ SIM_DLLEXPORT void ikPlugin_getObjectLocalTransformation(int ikEnv,int objectHan
 
 SIM_DLLEXPORT void ikPlugin_setObjectLocalTransformation(int ikEnv,int objectHandle,const double* pos,const double* quat)
 {
-    C7Vector tr;
+    CPose tr;
     tr.X(0)=pos[0];
     tr.X(1)=pos[1];
     tr.X(2)=pos[2];
